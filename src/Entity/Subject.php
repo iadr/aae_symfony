@@ -5,9 +5,11 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SubjectRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Subject
 {
@@ -30,6 +32,7 @@ class Subject
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="subjects")
+     * @Serializer\Exclude()
      */
     private $subjectTutor;
 

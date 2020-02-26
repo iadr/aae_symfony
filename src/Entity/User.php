@@ -6,9 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
@@ -37,18 +39,36 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Subject", mappedBy="subjectTutor")
+     * @Serializer\Exclude()
      */
     private $subjects;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TutorHours", mappedBy="tutorId", orphanRemoval=true)
+     * @Serializer\Exclude()
      */
     private $tutorHours;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Appointment", mappedBy="student")
+     * @Serializer\Exclude()
      */
     private $appointments;
+
+    /**
+     * @ORM\Column(type="string", length=120)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=120)
+     */
+    private $studyIn;
+
+    /**
+     * @ORM\Column(type="string", length=150, nullable=true)
+     */
+    private $address;
 
     public function __construct()
     {
@@ -91,7 +111,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_STUDENT';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -221,6 +241,42 @@ class User implements UserInterface
                 $appointment->setStudent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getStudyIn(): ?string
+    {
+        return $this->studyIn;
+    }
+
+    public function setStudyIn(string $studyIn): self
+    {
+        $this->studyIn = $studyIn;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

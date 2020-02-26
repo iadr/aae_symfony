@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AppointmentRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Appointment
 {
@@ -19,6 +21,7 @@ class Appointment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Subject")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
      */
     private $subject;
 
@@ -35,12 +38,14 @@ class Appointment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="appointments")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
      */
     private $student;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="appointments")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
      */
     private $tutor;
 

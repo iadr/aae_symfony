@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TutorHoursRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class TutorHours
 {
@@ -19,6 +21,7 @@ class TutorHours
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tutorHours")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
      */
     private $tutorId;
 
@@ -28,7 +31,7 @@ class TutorHours
     private $hour;
 
     /**
-     * @ORM\Column(type="string", length=9)
+     * @ORM\Column(type="integer")
      */
     private $dayOfWeek;
 
