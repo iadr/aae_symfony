@@ -23,56 +23,73 @@ class TutorHours
      * @ORM\JoinColumn(nullable=false)
      * @Serializer\Exclude()
      */
-    private $tutorId;
+    private $tutor;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="json", nullable=true)
      */
-    private $hour;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $dayOfWeek;
+    private $hours = [];
+//
+//    /**
+//     * @ORM\Column(type="time")
+//     */
+//    private $hour;
+//
+//    /**
+//     * @ORM\Column(type="integer")
+//     */
+//    private $dayOfWeek;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTutorId(): ?User
+    public function getTutor(): ?User
     {
-        return $this->tutorId;
+        return $this->tutor;
     }
 
-    public function setTutorId(?User $tutorId): self
+    public function setTutor(?User $tutor): self
     {
-        $this->tutorId = $tutorId;
+        $this->tutor = $tutor;
 
         return $this;
     }
 
-    public function getHour(): ?\DateTimeInterface
+    public function getHours(): ?array
     {
-        return $this->hour;
+        return $this->hours;
     }
 
-    public function setHour(\DateTimeInterface $hour): self
+    public function setHours(?array $hours): self
     {
-        $this->hour = $hour;
+        $this->hours = $hours;
 
         return $this;
     }
 
-    public function getDayOfWeek(): ?string
-    {
-        return $this->dayOfWeek;
-    }
-
-    public function setDayOfWeek(string $dayOfWeek): self
-    {
-        $this->dayOfWeek = $dayOfWeek;
-
-        return $this;
-    }
+//    public function getHour(): ?\DateTimeInterface
+//    {
+//        return $this->hour;
+//    }
+//
+//    public function setHour(\DateTimeInterface $hour): self
+//    {
+//        $this->hour = $hour;
+//
+//        return $this;
+//    }
+//
+//    public function getDayOfWeek(): ?string
+//    {
+//        return $this->dayOfWeek;
+//    }
+//
+//    public function setDayOfWeek(string $dayOfWeek): self
+//    {
+//        $this->dayOfWeek = $dayOfWeek;
+//
+//        return $this;
+//    }
 }

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -70,8 +71,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
     */
-//    public function addToSubject()
-//    {
-//
-//    }
+    public function findTutors()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select name,study_in FROM user where JSON_CONTAINS(roles,\'["ROLE_TUTOR"]\');';
+
+        try {
+            $stmt = $conn->prepare($sql);
+        } catch (DBALException $e) {
+        }
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+
 }

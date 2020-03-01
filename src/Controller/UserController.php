@@ -20,7 +20,7 @@ class UserController extends FOSRestController
 {
 
     /**
-     * @Rest\Post("/login_check", name="user_login_check")
+     * @Rest\Post("/api/login_check", name="user_login_check")
      *
      * @SWG\Response(
      *     response=200,
@@ -54,7 +54,7 @@ class UserController extends FOSRestController
     public function getLoginCheckAction() {}
 
     /**
-     * @Rest\Post("/register", name="user_register")
+     * @Rest\Post("/api/register", name="user_register")
      *
      * @SWG\Response(
      *     response=201,

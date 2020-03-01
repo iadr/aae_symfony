@@ -13,7 +13,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 
 /**
- * @Route("/api/subjects")
+ * @Route("/api/aae/subjects")
  */
 class SubjectController extends FOSRestController
 {

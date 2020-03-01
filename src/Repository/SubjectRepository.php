@@ -6,6 +6,7 @@ use App\Entity\Subject;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method Subject|null find($id, $lockMode = null, $lockVersion = null)
@@ -86,5 +87,31 @@ class SubjectRepository extends ServiceEntityRepository
         }
         $stmt->execute(['level' => $level]);
         return $stmt->fetchAll();
+    }
+    
+    public function getNotRelatedSubjects(int $user)
+    {
+        $conn= $this->getEntityManager()->getConnection();
+        $sql='select id,name,level from subject s 
+where s.id not in (select subject_id from subject_user where user_id=:user);';
+
+        try {
+            $stmt = $conn->prepare($sql);
+        } catch (DBALException $e) {
+        }
+        $stmt->execute(['user' => $user]);
+        return $stmt->fetchAll(); 
+    }
+
+    public function addSubjectTutor(int $subject, int $tutor)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        try {
+            $conn->insert('subject_user', ['subject' => $subject, 'tutor' => $tutor]);
+
+        } catch (DBALException $e) {
+            return "problem";
+        }
     }
 }
