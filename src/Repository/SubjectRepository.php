@@ -114,4 +114,35 @@ where s.id not in (select subject_id from subject_user where user_id=:user);';
             return "problem";
         }
     }
+
+    public function findAvailableSubjects()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select id,name,level, count(*) as tutors from subject s 
+                join subject_user su on s.id=su.subject_id group by s.id;';
+
+        try {
+            $stmt = $conn->prepare($sql);
+        } catch (DBALException $e) {
+        }
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    public function getTutorList(int $subject)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select id,name, study_in from user u
+                join subject_user su on u.id=su.user_id
+                where su.subject_id=:subject;';
+
+        try {
+            $stmt = $conn->prepare($sql);
+        } catch (DBALException $e) {
+        }
+        $stmt->execute(['subject' => $subject]);
+
+        return $stmt->fetchAll();
+    }
 }

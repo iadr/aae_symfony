@@ -260,6 +260,77 @@ class TutorController extends FOSRestController
     }
 
     /**
+     * @Rest\Put("/subjects/delete.{_format}", name="api_delete_subject_tutor_relation", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description=""
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description=""
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="subject_id",
+     *     in="query",
+     *     type="int",
+     *     description="The ID"
+     * )
+     *
+     *@SWG\Parameter(
+     *     name="id",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     *
+     *
+     * @SWG\Tag(name="Subject")
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteSubjectTutorAction(Request $request)
+    {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $subject = [];
+        $message = "";
+        try {
+            $code = 200;
+            $error = false;
+            $subjectId=$request->request->get('subject_id');
+            $tutor=$em->getRepository(User::class)->find($this->getUser()->getId());
+            $subject = $em->getRepository(Subject::class)->find($subjectId);
+
+                if (!is_null($subject) && !is_null($tutor)) {
+//                    $subject = [];
+                    $tutor->removeSubject($subject);
+                    $em->flush();
+                    $message= "The relation was removed successfully!";
+                } else {
+                    $code = 500;
+                    $error = true;
+                    $message = "An error has occurred trying to remove the Subject - Error: The board id does not exist";
+                }
+
+            } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get all objects - Error: {$ex->getMessage()}";
+        }
+
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $message,
+        ];
+
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
      * @Rest\Get("/hours.{_format}", name="api_get_tutor_hours", defaults={"_format":"json"})
      *
      * @SWG\Response(
@@ -280,7 +351,7 @@ class TutorController extends FOSRestController
      * )
      *
      *
-     * @SWG\Tag(name="Subject")
+     * @SWG\Tag(name="Tutor Hours")
      * @param Request $request
      * @return Response
      */
@@ -317,7 +388,7 @@ class TutorController extends FOSRestController
     }
 
     /**
-     * @Rest\Put("/config_hours.{_format}", name="api_set_tutor_hours", defaults={"_format":"json"})
+     * @Rest\Put("/hours.{_format}", name="api_set_tutor_hours", defaults={"_format":"json"})
      *
      * @SWG\Response(
      *     response=200,
@@ -343,13 +414,12 @@ class TutorController extends FOSRestController
      * )
      *
      *
-     * @SWG\Tag(name="Subject")
+     * @SWG\Tag(name="Tutor Hours")
      * @param Request $request
      * @return Response
      */
     public function setTutorHoursAction(Request $request)
     {
-        // TODO: Escribir metodo para Setteo de Horas de usuario
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $tutorHours = [];
@@ -394,4 +464,62 @@ class TutorController extends FOSRestController
 
         return new Response($serializer->serialize($response, "json"));
     }
+
+    /**
+     * @Rest\Get("/appointments.{_format}", name="api_get_tutor_appointments", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description=""
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description=""
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     *
+     *
+     * @SWG\Tag(name="Tutor Appointments")
+     * @param Request $request
+     * @return Response
+     */
+    public function getAppointmentsAction(Request $request)
+    {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $appointments = [];
+        $message = "";
+        try {
+            $code = 200;
+            $error = false;
+
+            $tutor=$em->getRepository(User::class)->find($this->getUser()->getId());
+            $appointments=$tutor->getAppointments();
+
+            if (is_null($appointments)) {
+                $appointments = [];
+            }
+    
+            } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get all appointments - Error: {$ex->getMessage()}";
+        }
+
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $appointments : $message,
+        ];
+
+        return new Response($serializer->serialize($response, "json"));
+    }
+
 }

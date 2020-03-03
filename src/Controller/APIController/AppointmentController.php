@@ -56,7 +56,7 @@ class AppointmentController extends FOSRestController
             $code = 200;
             $error = false;
 
-            $objects = $em->getRepository(Subject::class)->findThemAll(); // TODO: Función que retorne solo las materias con tutores
+            $objects = $em->getRepository(Subject::class)->findAvailableSubjects();
 
             if (is_null($objects)) {
                 $objects = [];
@@ -76,5 +76,7 @@ class AppointmentController extends FOSRestController
 
         return new Response($serializer->serialize($response, "json"));
     }
+
+    // TODO: RETORNAR FECHAS DE CALENDARIO EN DONDE SE DESPLIEGUE LAS HORAS DISPONIBLES DEL TUTOR
 
 }
