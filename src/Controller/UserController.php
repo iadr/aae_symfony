@@ -121,15 +121,15 @@ class UserController extends FOSRestController
 
             $name = $request->request->get('_name');
             $email = $request->request->get('_email');
-            $studyIn = $request->request->get('_study');
-            $address = $request->request->get('_address');
+//            $studyIn = $request->request->get('_study');
+//            $address = $request->request->get('_address');
             $password = $request->request->get('_password');
 
             $user = new User();
             $user->setName($name);
             $user->setEmail($email);
-            $user->setStudyIn($studyIn);
-            ($address)?$user->setAddress($address):null;
+//            $user->setStudyIn($studyIn);
+//            ($address)?$user->setAddress($address):null;
             $user->setPassword($encoder->encodePassword($user, $password));
 
             $em->persist($user);

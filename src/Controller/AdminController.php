@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/", name="user_index", methods={"GET"})
+     * @Route("/users/", name="user_index", methods={"GET"})
      * @param UserRepository $userRepository
      * @return Response
      */
@@ -65,7 +65,7 @@ class AdminController extends AbstractController
 //    }
 
     /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
+     * @Route("/users/{id}", name="user_show", methods={"GET"})
      * @param User $user
      * @return Response
      */
@@ -77,7 +77,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @Route("/users/{id}/edit", name="user_edit", methods={"GET","POST"})
      * @param Request $request
      * @param User $user
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -107,7 +107,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * @Route("/users/{id}", name="user_delete", methods={"DELETE"})
      * @param Request $request
      * @param User $user
      * @return Response

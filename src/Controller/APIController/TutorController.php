@@ -17,6 +17,7 @@ use Swagger\Annotations as SWG;
 
 /**
  * @Route("/api/aae/tutors")
+ * @IsGranted("ROLE_TUTOR")
  */
 class TutorController extends FOSRestController
 {

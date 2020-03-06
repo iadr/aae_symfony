@@ -61,7 +61,7 @@ class User implements UserInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=120)
+     * @ORM\Column(type="string", length=120, nullable=true)
      */
     private $studyIn;
 
