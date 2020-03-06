@@ -8,6 +8,7 @@ use App\Entity\TutorHours;
 use App\Entity\User;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,7 @@ use Swagger\Annotations as SWG;
  * Class AppointmentController
  * @package App\Controller\APIController
  * @Route("/api/aae/appointments")
+ * @IsGranted("ROLE_STUDENT")
  */
 class AppointmentController extends FOSRestController
 {
@@ -100,7 +102,7 @@ class AppointmentController extends FOSRestController
      * )
      *
      *
-     * @SWG\Tag(name="Appointmenta")
+     * @SWG\Tag(name="Appointment")
      * @param Request $request
      * @param int     $subject_id
      * @return Response
