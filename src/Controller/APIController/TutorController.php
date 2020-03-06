@@ -206,7 +206,7 @@ class TutorController extends FOSRestController
      * @SWG\Parameter(
      *     name="subject_id",
      *     in="query",
-     *     type="int",
+     *     type="number",
      *     description="The Subject ID"
      * )
      * 
@@ -275,7 +275,7 @@ class TutorController extends FOSRestController
      * @SWG\Parameter(
      *     name="subject_id",
      *     in="query",
-     *     type="int",
+     *     type="number",
      *     description="The ID"
      * )
      *
@@ -409,7 +409,7 @@ class TutorController extends FOSRestController
      * @SWG\Parameter(
      *     name="hours",
      *     in="query",
-     *     type="json",
+     *     type="string",
      *     description="The ID"
      * )
      *

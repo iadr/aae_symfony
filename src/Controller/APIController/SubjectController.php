@@ -39,10 +39,9 @@ class SubjectController extends FOSRestController
      *
      *
      * @SWG\Tag(name="Subject")
-     * @param Request $request
      * @return Response
      */
-    public function getAllSubjectAction(Request $request) {
+    public function getAllSubjectAction() {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $subjects = [];
@@ -95,11 +94,10 @@ class SubjectController extends FOSRestController
      *
      *
      * @SWG\Tag(name="Subject")
-     * @param Request $request
      * @param         $level
      * @return Response
      */
-    public function getSubjectsByLevelAction(Request $request, $level) {
+    public function getSubjectsByLevelAction(int $level) {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $subjects = [];

@@ -7,6 +7,12 @@ use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AppointmentRepository")
+ * @ORM\Table(name="appointment",
+ *      uniqueConstraints={
+ *          @ORM\UniqueConstraint(name="appointment_unique",
+ *              columns={"student_id","tutor_id","date","hour"}
+ *          )
+ *      })
  * @ORM\HasLifecycleCallbacks()
  */
 class Appointment

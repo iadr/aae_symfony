@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Appointment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\DBALException;
 
 /**
  * @method Appointment|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +48,24 @@ class AppointmentRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function newAppointment(int $studentId,int $tutorId, int $subjectId, string $date, string $hour)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        try {
+            return $conn->insert(
+                'appointment',
+                [
+                    'subject_id' => $subjectId,
+                    'student_id' => $studentId,
+                    'tutor_id' => $tutorId,
+                    'date' => $date,
+                    'hour' => $hour,
+                ]
+            );
+        } catch (DBALException $e) {
+            return 500;
+        }
+    }
 }

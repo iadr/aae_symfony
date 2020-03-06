@@ -6,7 +6,7 @@ use App\Entity\Subject;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
-use Symfony\Component\HttpFoundation\Response;
+//use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method Subject|null find($id, $lockMode = null, $lockVersion = null)
@@ -113,6 +113,7 @@ where s.id not in (select subject_id from subject_user where user_id=:user);';
         } catch (DBALException $e) {
             return "problem";
         }
+        return "OK";
     }
 
     public function findAvailableSubjects()
