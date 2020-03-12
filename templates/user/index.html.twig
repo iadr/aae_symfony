@@ -11,15 +11,21 @@
             <th>Id</th>
             <th>Email</th>
             <th>Roles</th>
+            <th>Enabled</th>
             <th>actions</th>
         </tr>
         </thead>
         <tbody>
         {% for user in users %}
-            <tr>
+            {% if user.enabled %}
+                <tr>
+            {% else %}
+                <tr class="text-black-50">
+            {% endif %}
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td>{{ user.enabled? "Enabled" : 'Disabled' }}</td>
                 <td>
                     <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
                     <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>

@@ -29,6 +29,11 @@
                 <td>{{ ' You shouldn\'t be looking for this info!!' }}</td>
             </tr>
             <tr>
+                <th>Enabled</th>
+{#                <td>{{ user.address? user.address| slice(1,5): 'Not defined!' }}</td>#}
+                <td>{{ user.enabled ? "Enabled" : "Disabled" }}</td>
+            </tr>
+            <tr>
                 <th>Roles</th>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
             </tr>
@@ -39,5 +44,5 @@
 
     <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
 
-    {{ include('user/_delete_form.html.twig') }}
+{#    {{ include('user/_delete_form.html.twig') }}#}
 {% endblock %}

@@ -56,7 +56,7 @@ class User implements UserInterface
     private $appointments;
 
     /**
-     * @ORM\Column(type="string", length=120)
+     * @ORM\Column(type="string", length=120, nullable=true)
      */
     private $name;
 
@@ -69,6 +69,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=150, nullable=true)
      */
     private $address;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled=false;
 
     public function __construct()
     {
@@ -195,7 +200,7 @@ class User implements UserInterface
     {
         if (!$this->tutorHours->contains($tutorHour)) {
             $this->tutorHours[] = $tutorHour;
-            $tutorHour->setTutorId($this);
+            $tutorHour->setTutor($this);
         }
 
         return $this;
@@ -206,8 +211,8 @@ class User implements UserInterface
         if ($this->tutorHours->contains($tutorHour)) {
             $this->tutorHours->removeElement($tutorHour);
             // set the owning side to null (unless already changed)
-            if ($tutorHour->getTutorId() === $this) {
-                $tutorHour->setTutorId(null);
+            if ($tutorHour->getTutor() === $this) {
+                $tutorHour->setTutor(null);
             }
         }
 
@@ -277,6 +282,18 @@ class User implements UserInterface
     public function setAddress(?string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

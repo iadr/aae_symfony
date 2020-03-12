@@ -5,6 +5,7 @@ namespace App\Controller\APIController;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 
 /**
  * @Route("/api/aae/students")
+ * @IsGranted("ROLE_STUDENT")
  */
 class StudentController extends FOSRestController
 {

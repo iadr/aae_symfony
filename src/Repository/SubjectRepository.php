@@ -119,8 +119,11 @@ where s.id not in (select subject_id from subject_user where user_id=:user);';
     public function findAvailableSubjects()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'select id,name,level, count(*) as tutors from subject s 
-                join subject_user su on s.id=su.subject_id group by s.id;';
+        $sql = 'select s.id as id,s.name as name,level, count(*) as tutors from subject s 
+                join subject_user su on s.id=su.subject_id
+                join user u on su.user_id=u.id 
+                where u.enabled 
+                group by s.id;';
 
         try {
             $stmt = $conn->prepare($sql);
@@ -136,7 +139,7 @@ where s.id not in (select subject_id from subject_user where user_id=:user);';
         $conn = $this->getEntityManager()->getConnection();
         $sql = 'select id,name, study_in from user u
                 join subject_user su on u.id=su.user_id
-                where su.subject_id=:subject;';
+                where su.subject_id=:subject and u.enabled;';
 
         try {
             $stmt = $conn->prepare($sql);
