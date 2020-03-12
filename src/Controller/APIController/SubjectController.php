@@ -5,6 +5,7 @@ namespace App\Controller\APIController;
 use App\Entity\Subject;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ use Swagger\Annotations as SWG;
 
 /**
  * @Route("/api/aae/subjects")
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
  */
 class SubjectController extends FOSRestController
 {

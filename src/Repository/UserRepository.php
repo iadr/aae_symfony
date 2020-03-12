@@ -74,7 +74,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findTutors()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'select name,study_in FROM user where JSON_CONTAINS(roles,\'["ROLE_TUTOR"]\');';
+        $sql = 'select name,study_in FROM user where JSON_CONTAINS(roles,\'["ROLE_TUTOR"]\') and enabled;';
 
         try {
             $stmt = $conn->prepare($sql);
