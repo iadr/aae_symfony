@@ -26,7 +26,7 @@ class Subject
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $level;
 
@@ -58,12 +58,12 @@ class Subject
         return $this;
     }
 
-    public function getLevel(): ?int
+    public function getLevel(): ?string
     {
         return $this->level;
     }
 
-    public function setLevel(int $level): self
+    public function setLevel(string $level): self
     {
         $this->level = $level;
 

@@ -20,18 +20,18 @@ class SubjectType extends AbstractType
             ->add('level',ChoiceType::class,[
                 'label' =>'Curso',
                 'choices'=> [
-                '1° básico' => 1,
-                '2° básico' => 2,
-                '3° básico' => 3,
-                '4° básico' => 4,
-                '5° básico' => 5,
-                '6° básico' => 6,
-                '7° básico' => 7,
-                '8° básico' => 8,
-                '1° medio' => 9,
-                '2° medio' => 10,
-                '3° medio' => 11,
-                '4° medio' => 12
+                '1° básico',
+                '2° básico',
+                '3° básico',
+                '4° básico',
+                '5° básico',
+                '6° básico',
+                '7° básico',
+                '8° básico',
+                '1° medio',
+                '2° medio',
+                '3° medio',
+                '4° medio'
                 ]
             ])
 //            ->add('subjectTutor')

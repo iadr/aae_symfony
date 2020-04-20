@@ -52,22 +52,23 @@ class SubjectRepository extends ServiceEntityRepository
     public function findThemAll()
     {
         $conn= $this->getEntityManager()->getConnection();
-        $sql='select id,name,
-                CASE
-                    WHEN level =1 THEN "1° básico"
-                    WHEN level =2 THEN "2° básico"
-                    WHEN level =3 THEN "3° básico"
-                    WHEN level =4 THEN "4° básico"
-                    WHEN level =5 THEN "5° básico"
-                    WHEN level =6 THEN "6° básico"
-                    WHEN level =7 THEN "7° básico"
-                    WHEN level =8 THEN "8° básico"
-                    WHEN level =9 THEN "1° medio"
-                    WHEN level =10 THEN "2° medio"
-                    WHEN level =11 THEN "3° medio"
-                    WHEN level =12 THEN "4° medio"
-                END as level
-                FROM subject;';
+//        $sql='select id,name,
+//                CASE
+//                    WHEN level =1 THEN "1° básico"
+//                    WHEN level =2 THEN "2° básico"
+//                    WHEN level =3 THEN "3° básico"
+//                    WHEN level =4 THEN "4° básico"
+//                    WHEN level =5 THEN "5° básico"
+//                    WHEN level =6 THEN "6° básico"
+//                    WHEN level =7 THEN "7° básico"
+//                    WHEN level =8 THEN "8° básico"
+//                    WHEN level =9 THEN "1° medio"
+//                    WHEN level =10 THEN "2° medio"
+//                    WHEN level =11 THEN "3° medio"
+//                    WHEN level =12 THEN "4° medio"
+//                END as level
+//                FROM subject;';
+        $sql='select id,name,level FROM subject;';
 
         try {
             $stmt = $conn->prepare($sql);
@@ -76,7 +77,7 @@ class SubjectRepository extends ServiceEntityRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    public function findyByLevel(int $level)
+    public function findyByLevel(string $level)
     {
         $conn= $this->getEntityManager()->getConnection();
         $sql='select id,name FROM subject where level=:level;';

@@ -243,6 +243,8 @@ class TutorController extends FOSRestController
                     $tutor->addSubject($subject);
                     $em->persist($tutor);
                     $em->flush();
+//                    $subject=$em->getRepository(Subject::class)->addSubjectTutor($subjectId,$tutorId);
+
                 }
     
             } catch (Exception $ex) {
@@ -297,15 +299,14 @@ class TutorController extends FOSRestController
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $subject = [];
-        $message = "";
         try {
             $code = 200;
             $error = false;
             $subjectId=$request->request->get('subject_id');
             $tutor=$em->getRepository(User::class)->find($this->getUser()->getId());
             $subject = $em->getRepository(Subject::class)->find($subjectId);
-
-                if (!is_null($subject) && !is_null($tutor)) {
+            $checkSubject=$tutor->getSubjects()->contains($subject);
+                if ($checkSubject) {
 //                    $subject = [];
                     $tutor->removeSubject($subject);
                     $em->flush();

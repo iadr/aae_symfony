@@ -53,7 +53,8 @@ class SubjectController extends FOSRestController
             $code = 200;
             $error = false;
 
-            $subjects = $em->getRepository(Subject::class)->findThemAll();
+//            $subjects = $em->getRepository(Subject::class)->findThemAll();
+            $subjects = $em->getRepository(Subject::class)->findAll();
 
             if (is_null($subjects)) {
                 $subjects = [];
@@ -99,7 +100,7 @@ class SubjectController extends FOSRestController
      * @param         $level
      * @return Response
      */
-    public function getSubjectsByLevelAction(int $level) {
+    public function getSubjectsByLevelAction(string $level) {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $subjects = [];
