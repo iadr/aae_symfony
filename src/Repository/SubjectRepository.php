@@ -6,6 +6,8 @@ use App\Entity\Subject;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\FetchMode;
+
 //use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -149,5 +151,21 @@ where s.id not in (select subject_id from subject_user where user_id=:user);';
         $stmt->execute(['subject' => $subject]);
 
         return $stmt->fetchAll();
+    }
+
+    public function getTutorIds(int $subject)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select id from user u
+                join subject_user su on u.id=su.user_id
+                where su.subject_id=:subject and u.enabled;';
+
+        try {
+            $stmt = $conn->prepare($sql);
+        } catch (DBALException $e) {
+        }
+        $stmt->execute(['subject' => $subject]);
+
+        return $stmt->fetchAll(FetchMode::COLUMN);
     }
 }

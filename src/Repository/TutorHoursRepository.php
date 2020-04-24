@@ -49,27 +49,37 @@ class TutorHoursRepository extends ServiceEntityRepository
     }
     */
 
-    public function getTutorAvailableHours(int $tutorId)
+    public function getTutorAvailableHours(array $arr)
     {
         $conn = $this->getEntityManager()->getConnection();
+
+//        $sql = 'select sq.* from (
+//	select td.db_date,ht.hour from time_dimension as td
+//	join (
+//		select th.tutor_id,hours.* from tutor_hours th,
+//			JSON_TABLE(hours,\'$.hours[*]\' columns(
+//				-- dateid for ordinality,
+//				day int path \'$.day\',
+//				hour time path \'$.hour\')
+//				) hours where th.tutor_id=:tutorId) as ht
+//		where ht.day=td.day_of_week) as sq
+//    where (sq.db_date,sq.hour) not in (select date,hour from appointment where tutor_id=:tutorId);';
+
         $sql = 'select sq.* from (
-	select td.db_date,ht.hour from time_dimension as td
+	select td.db_date,ht.hour,tutor_id from (SELECT * FROM time_dimension WHERE db_date BETWEEN  CURRENT_DATE AND CURRENT_DATE + INTERVAL 3 MONTH ) as td
 	join (
-		select th.tutor_id,hours.* from tutor_hours th, 
+		select th.tutor_id,hours.* from tutor_hours th,
 			JSON_TABLE(hours,\'$.hours[*]\' columns(
 				-- dateid for ordinality,
-				day int path \'$.day\', 
+				day int path \'$.day\',
 				hour time path \'$.hour\')
-				) hours where th.tutor_id=:tutorId) as ht
-		where ht.day=td.day_of_week) as sq 
-    where (sq.db_date,sq.hour) not in (select date,hour from appointment where tutor_id=:tutorId);';
-
+				) hours where th.tutor_id IN (?)) as ht
+		where ht.day=td.day_of_week) as sq
+    where (sq.db_date,sq.hour) not in (select date,hour from appointment where tutor_id IN (?)) ORDER BY sq.db_date,sq.hour;';
         try {
-            $stmt = $conn->prepare($sql);
+            $stmt = $conn->executeQuery($sql, [$arr, $arr], [\Doctrine\DBAL\Connection::PARAM_INT_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
         } catch (DBALException $e) {
         }
-        $stmt->execute(['tutorId' => $tutorId]);
-
         return $stmt->fetchAll();
     }
 }

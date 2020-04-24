@@ -116,7 +116,8 @@ class AppointmentController extends FOSRestController
         try {
             $code = 200;
             $error = false;
-            $objects = $em->getRepository(Subject::class)->getTutorList($subject_id);
+            $tutors = $em->getRepository(Subject::class)->getTutorIds($subject_id);
+            $objects = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutors);
                 if (is_null($objects)) {
                     $objects = [];
                 }
@@ -168,7 +169,7 @@ class AppointmentController extends FOSRestController
      * @param Request $request
      * @return Response
      */
-    public function getTutorAvailableHoursAction(Request $request)
+    public function getTutorAvailableHoursAction(Request $request) //! No funciona, parametro debe ir en ruta
     {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
