@@ -368,7 +368,7 @@ class TutorController extends FOSRestController
             $error = false;
 
             $tutorId=$this->getUser()->getId();
-            $hours = $em->getRepository(TutorHours::class)->findBy(['tutor' => $tutorId]);
+            $hours = $em->getRepository(TutorHours::class)->findOneBy(['tutor' => $tutorId]);
     
                 if (is_null($hours)) {
                     $hours = [];
