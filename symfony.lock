@@ -1,4 +1,7 @@
 {
+    "cboden/ratchet": {
+        "version": "v0.4.2"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -90,8 +93,17 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
+    "evenement/evenement": {
+        "version": "v3.0.1"
+    },
     "exsyst/swagger": {
         "version": "v0.4.1"
+    },
+    "fig/http-message-util": {
+        "version": "1.1.4"
+    },
+    "firebase/php-jwt": {
+        "version": "v5.2.0"
     },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
@@ -104,6 +116,33 @@
         "files": [
             "config/packages/fos_rest.yaml"
         ]
+    },
+    "giggsey/libphonenumber-for-php": {
+        "version": "8.12.2"
+    },
+    "giggsey/locale": {
+        "version": "1.8"
+    },
+    "google/auth": {
+        "version": "v1.8.0"
+    },
+    "google/cloud-core": {
+        "version": "v1.36.2"
+    },
+    "google/cloud-storage": {
+        "version": "v1.20.1"
+    },
+    "google/crc32": {
+        "version": "v0.1.0"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "6.5.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.6.1"
     },
     "hoa/compiler": {
         "version": "3.17.08.08"
@@ -167,6 +206,18 @@
             "config/packages/prod/jms_serializer.yaml"
         ]
     },
+    "kreait/clock": {
+        "version": "1.0.1"
+    },
+    "kreait/firebase-bundle": {
+        "version": "2.0.0"
+    },
+    "kreait/firebase-php": {
+        "version": "5.1.1"
+    },
+    "kreait/firebase-tokens": {
+        "version": "1.10.0"
+    },
     "lcobucci/jwt": {
         "version": "3.3.1"
     },
@@ -184,6 +235,9 @@
     },
     "monolog/monolog": {
         "version": "1.25.3"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.5.0"
     },
     "namshi/jose": {
         "version": "7.2.3"
@@ -228,11 +282,50 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.1"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
+    },
+    "ratchet/rfc6455": {
+        "version": "v0.2.6"
+    },
+    "react/cache": {
+        "version": "v1.0.0"
+    },
+    "react/dns": {
+        "version": "v1.2.0"
+    },
+    "react/event-loop": {
+        "version": "v1.1.1"
+    },
+    "react/promise": {
+        "version": "v2.7.1"
+    },
+    "react/promise-timer": {
+        "version": "v1.5.1"
+    },
+    "react/socket": {
+        "version": "v1.4.0"
+    },
+    "react/stream": {
+        "version": "v1.1.0"
+    },
+    "riverline/multipart-parser": {
+        "version": "2.0.8"
+    },
+    "rize/uri-template": {
+        "version": "0.3.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -398,6 +491,21 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
+    },
+    "symfony/mercure": {
+        "version": "v0.3.0"
+    },
+    "symfony/mercure-bundle": {
+        "version": "0.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "0.2",
+            "ref": "a37d3438e4bd4f9f924c516996bc29e25f66b07e"
+        },
+        "files": [
+            "config/packages/mercure.yaml"
+        ]
     },
     "symfony/mime": {
         "version": "v4.4.4"
