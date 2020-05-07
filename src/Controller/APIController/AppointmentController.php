@@ -104,7 +104,7 @@ class AppointmentController extends FOSRestController
      *
      * @SWG\Tag(name="Appointment")
      * @param Request $request
-     * @param int     $subject_id
+     * @param int $subject_id
      * @return Response
      */
     public function getTutorsBySubjectAction(Request $request, int $subject_id)
@@ -118,11 +118,12 @@ class AppointmentController extends FOSRestController
             $error = false;
             $tutors = $em->getRepository(Subject::class)->getTutorIds($subject_id);
             $objects = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutors);
-                if (is_null($objects)) {
-                    $objects = [];
-                }
+            $tutorsData = $em->getRepository(User::class)->getTutorList($tutors);
+            if (is_null($objects)) {
+                $objects = [];
+            }
 
-            } catch (Exception $ex) {
+        } catch (Exception $ex) {
             $code = 500;
             $error = true;
             $message = "An error has occurred trying to get all objects - Error: {$ex->getMessage()}";
@@ -132,6 +133,7 @@ class AppointmentController extends FOSRestController
             'code' => $code,
             'error' => $error,
             'data' => $code == 200 ? $objects : $message,
+            'tutors' => $code == 200 ? $tutorsData : $message,
         ];
 
         return new Response($serializer->serialize($response, "json"));
@@ -178,14 +180,14 @@ class AppointmentController extends FOSRestController
         try {
             $code = 200;
             $error = false;
-            $tutorId=$request->request->get('tutor_id');
+            $tutorId = $request->request->get('tutor_id');
             $hours = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutorId);
-    
-                if (is_null($hours)) {
-                    $hours = [];
-                }
-    
-            } catch (Exception $ex) {
+
+            if (is_null($hours)) {
+                $hours = [];
+            }
+
+        } catch (Exception $ex) {
             $code = 500;
             $error = true;
             $message = "An error has occurred trying to get all hours - Error: {$ex->getMessage()}";
@@ -256,18 +258,18 @@ class AppointmentController extends FOSRestController
         try {
             $code = 200;
             $error = false;
-            $studentId=$this->getUser()->getId();
-            $tutorId=$request->request->get('tutor_id');
-            $subjectId=$request->request->get('subject_id');
-            $dates=$serializer->deserialize($request->request->get('dates'),"array","json");
+            $studentId = $this->getUser()->getId();
+            $tutorId = $request->request->get('tutor_id');
+            $subjectId = $request->request->get('subject_id');
+            $dates = $serializer->deserialize($request->request->get('dates'), "array", "json");
 
             if (!is_null($dates) and !empty($dates)) {
                 foreach ($dates as $date) {
 //                    $dates[]=[$date["date"],$date["hour"]]; // YA NO ES NECESARIO
 
-                    $appointment = $em->getRepository(Appointment::class)->newAppointment($studentId,$tutorId,$subjectId,$date["date"],$date["hour"]);
-                    if($appointment==500){
-                        $code=500;
+                    $appointment = $em->getRepository(Appointment::class)->newAppointment($studentId, $tutorId, $subjectId, $date["date"], $date["hour"]);
+                    if ($appointment == 500) {
+                        $code = 500;
                         break;
                     }
 
@@ -277,7 +279,7 @@ class AppointmentController extends FOSRestController
 
             }
 
-            } catch (Exception $ex) {
+        } catch (Exception $ex) {
             $code = 500;
             $error = true;
             $message = "An error has occurred trying to set appointments - Error: {$ex->getMessage()}";

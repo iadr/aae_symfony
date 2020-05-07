@@ -49,7 +49,7 @@ class AppointmentRepository extends ServiceEntityRepository
     }
     */
 
-    public function newAppointment(int $studentId,int $tutorId, int $subjectId, string $date, string $hour)
+    public function newAppointment(int $studentId, int $tutorId, int $subjectId, string $date, string $hour)
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -67,5 +67,33 @@ class AppointmentRepository extends ServiceEntityRepository
         } catch (DBALException $e) {
             return 500;
         }
+    }
+
+    public function getTutorAppointments(int $tutorId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select appointment.id, subject_id, u.id as user_id, email, name, address, date, hour from appointment join user u on appointment.student_id = u.id where tutor_id=:tutor AND date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 15 DAY ';
+
+        try {
+            $stmt = $conn->prepare($sql);
+        } catch (DBALException $e) {
+        }
+        $stmt->execute(['tutor' => $tutorId]);
+
+        return $stmt->fetchAll();
+    }
+
+    public function getStudentAppointments(int $studentId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select appointment.id, subject_id, u.id as user_id, email, name, address, date, hour from appointment join user u on appointment.tutor_id = u.id where student_id=:student AND date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 15 DAY ';
+
+        try {
+            $stmt = $conn->prepare($sql);
+        } catch (DBALException $e) {
+        }
+        $stmt->execute(['student' => $studentId]);
+
+        return $stmt->fetchAll();
     }
 }

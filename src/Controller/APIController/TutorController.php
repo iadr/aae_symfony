@@ -2,6 +2,7 @@
 
 namespace App\Controller\APIController;
 
+use App\Entity\Appointment;
 use App\Entity\Subject;
 use App\Entity\TutorHours;
 use App\Entity\User;
@@ -502,8 +503,8 @@ class TutorController extends FOSRestController
             $code = 200;
             $error = false;
 
-            $tutor=$em->getRepository(User::class)->find($this->getUser()->getId());
-            $appointments=$tutor->getAppointments();
+            $tutorId=$this->getUser()->getId();
+            $appointments=$em->getRepository(Appointment::class)->getTutorAppointments($tutorId);
 
             if (is_null($appointments)) {
                 $appointments = [];
