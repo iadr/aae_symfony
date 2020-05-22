@@ -28,7 +28,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      * @param UserInterface $user
-     * @param string        $newEncodedPassword
+     * @param string $newEncodedPassword
      * @throws ORMException
      * @throws OptimisticLockException
      */
@@ -82,6 +82,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
         $stmt->execute();
 
+        return $stmt->fetchAll();
+    }
+
+    public function findTutorList(array $array)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT id,name,study_in FROM user where id in (?);';
+        try {
+            $stmt = $conn->executeQuery($sql, [$array], [\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
+        } catch (DBALException $e) {
+        }
         return $stmt->fetchAll();
     }
 

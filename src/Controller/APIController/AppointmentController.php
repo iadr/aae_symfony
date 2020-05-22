@@ -20,7 +20,7 @@ use Swagger\Annotations as SWG;
  * Class AppointmentController
  * @package App\Controller\APIController
  * @Route("/api/aae/appointments")
- * @IsGranted("ROLE_STUDENT")
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
  */
 class AppointmentController extends FOSRestController
 {
@@ -82,7 +82,7 @@ class AppointmentController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/subject_tutors/{subject_id}.{_format}", name="api_tutors_by_subject", defaults={"_format":"json"})
+     * @Rest\Get("/subject_tutors/{type}/{subject_id}/{date}.{_format}", name="api_tutors_by_subject", defaults={"_format":"json"})
      *
      * @SWG\Response(
      *     response=200,
@@ -105,20 +105,27 @@ class AppointmentController extends FOSRestController
      * @SWG\Tag(name="Appointment")
      * @param Request $request
      * @param int $subject_id
+     * @param string $date
+     * @param int $type
      * @return Response
      */
-    public function getTutorsBySubjectAction(Request $request, int $subject_id)
+    public function getTutorsBySubjectAction(Request $request, int $subject_id, string $date, int $type)
     {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $objects = [];
+        $tutorsData=[];
         $message = "";
         try {
             $code = 200;
             $error = false;
             $tutors = $em->getRepository(Subject::class)->getTutorIds($subject_id);
-            $objects = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutors);
-            $tutorsData = $em->getRepository(User::class)->getTutorList($tutors);
+            if ($type==1){
+                $objects = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutors,$date);
+            } else {
+                $objects = $em->getRepository(TutorHours::class)->getAvailableTutor($tutors,$date);
+            }
+            $tutorsData = $em->getRepository(User::class)->findTutorList($tutors);
             if (is_null($objects)) {
                 $objects = [];
             }
@@ -140,7 +147,7 @@ class AppointmentController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/tutor_free_hours.{_format}", name="api_tutor_available_hours", defaults={"_format":"json"})
+     * @Rest\Get("/tutor_free_hours/{tutor_id}/{date}.{_format}", name="api_tutor_available_hours", defaults={"_format":"json"})
      *
      * @SWG\Response(
      *     response=200,
@@ -169,9 +176,12 @@ class AppointmentController extends FOSRestController
      *
      * @SWG\Tag(name="Appointment")
      * @param Request $request
+     * @param int $tutorId
+     * @param string $date
      * @return Response
+     * @throws \Exception
      */
-    public function getTutorAvailableHoursAction(Request $request) //! No funciona, parametro debe ir en ruta
+    public function getTutorAvailableHoursAction(Request $request,int $tutorId,string $date) //! No funciona, parametro debe ir en ruta
     {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
@@ -180,9 +190,8 @@ class AppointmentController extends FOSRestController
         try {
             $code = 200;
             $error = false;
-            $tutorId = $request->request->get('tutor_id');
-            $hours = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutorId);
-
+//            $hours = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutorId);
+            $hours = $em->getRepository(TutorHours::class)->getTutorAvailableHours([$tutorId],$date);
             if (is_null($hours)) {
                 $hours = [];
             }

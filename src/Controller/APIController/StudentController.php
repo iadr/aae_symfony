@@ -2,6 +2,7 @@
 
 namespace App\Controller\APIController;
 
+use App\Entity\Appointment;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -55,8 +56,10 @@ class StudentController extends FOSRestController
             $code = 200;
             $error = false;
 
-            $student=$em->getRepository(User::class)->find($this->getUser()->getId());
-            $appointments=$student->getAppointments();
+//            $student=$em->getRepository(User::class)->find($this->getUser()->getId());
+//            $appointments=$student->getAppointments();
+            $studentId=$this->getUser()->getId();
+            $appointments=$em->getRepository(Appointment::class)->getStudentAppointments($studentId);
 
             if (is_null($appointments)) {
                 $appointments = [];
