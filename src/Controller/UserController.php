@@ -177,32 +177,150 @@ class UserController extends FOSRestController
      * @param Request $request
      * @return Response
      */
-    public function getUserProfileAction(Request $request)
+    public function getUserProfileAction(Request $request,UserPasswordEncoderInterface $encoder)
     {
         $serializer = $this->get('jms_serializer');
-        $em = $this->getDoctrine()->getManager();
-        $objects = [];
+//        $em = $this->getDoctrine()->getManager();
+        $profile = [];
         $message = "";
         try {
             $code = 200;
             $error = false;
-            $userId=$this->getUser()->getId();
-            $objects = $em->getRepository(User::class)->find($userId);
-
-                if (is_null($objects)) {
-                    $objects = [];
+//            $userId=$this->getUser()->getId();
+//            $profile = $em->getRepository(User::class)->find($userId);
+            $profile=$this->getUser();
+                if (is_null($profile)) {
+                    $profile = [];
                 }
 
             } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to get all objects - Error: {$ex->getMessage()}";
+            $message = "An error has occurred trying to get user profile - Error: {$ex->getMessage()}";
         }
 
         $response = [
             'code' => $code,
             'error' => $error,
-            'data' => $code == 200 ? $objects : $message,
+            'data' => $code == 200 ? $profile : $message,
+        ];
+
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+
+/**
+     * @Rest\Put("/api/aae/userprofile.{_format}", name="api_update_user_profile", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description=""
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description=""
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     * @SWG\Parameter(
+     *     name="name",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     * @SWG\Parameter(
+     *     name="address",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     * @SWG\Parameter(
+     *     name="study_in",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     * @SWG\Parameter(
+     *     name="major",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="email",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="password",
+     *     in="query",
+     *     type="string",
+     *     description="The ID"
+     * )
+     *
+     *
+     * @SWG\Tag(name="User")
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     * @param Request $request
+     * @return Response
+     */
+    public function setUserProfileAction(Request $request,UserPasswordEncoderInterface $encoder)
+    {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $profile = [];
+        $message = "";
+        try {
+            $code = 200;
+            $error = false;
+            $profile=$em->getRepository(User::class)->find($this->getUser()->getId());
+
+            $name=$request->request->get('name', null);
+            $address=$request->request->get('address', null);
+            $studyIn=$request->request->get('study_in', null);
+            $major=$request->request->get('major', null);
+            $description=$request->request->get('description', null);
+
+            $email=$request->request->get('email',$profile->getEmail());
+            $password=$request->request->get('password',$profile->getPassword());
+            $password=$encoder->encodePassword($profile,$password);
+//                if (is_null($profile)) {
+//                    $profile = [];
+//                }
+            $profile->setName($name);
+            $profile->setAddress($address);
+            $profile->setStudyIn($studyIn);
+            $profile->setMajor($major);
+            $profile->setDescription($description);
+
+            $profile->setEmail($email);
+            $profile->setPassword($password);
+
+            $em->persist($profile);
+            $em->flush();
+
+
+
+
+            } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get user profile - Error: {$ex->getMessage()}";
+        }
+
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $profile : $message,
         ];
 
         return new Response($serializer->serialize($response, "json"));

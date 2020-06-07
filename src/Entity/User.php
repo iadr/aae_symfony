@@ -75,6 +75,16 @@ class User implements UserInterface
      */
     private $enabled=false;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $major;
+    /**
+     * @ORM\Column(type="string", length=250, nullable=true)
+     */
+    private $description;
+
+
     public function __construct()
     {
         $this->subjects = new ArrayCollection();
@@ -296,5 +306,37 @@ class User implements UserInterface
         $this->enabled = $enabled;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMajor()
+    {
+        return $this->major;
+    }
+
+    /**
+     * @param mixed $major
+     */
+    public function setMajor($major): void
+    {
+        $this->major = $major;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
     }
 }

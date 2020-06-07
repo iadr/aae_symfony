@@ -72,7 +72,11 @@ class AppointmentRepository extends ServiceEntityRepository
     public function getTutorAppointments(int $tutorId)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'select appointment.id, subject_id, u.id as user_id, email, name, address, date, hour from appointment join user u on appointment.student_id = u.id where tutor_id=:tutor AND date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 15 DAY ';
+//        $sql = 'select appointment.id, subject_id, u.id as user_id, email, name, address, date, hour from appointment join user u on appointment.student_id = u.id where tutor_id=:tutor AND date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 15 DAY ';
+        $sql = 'select appointment.id as id,subject_id, s.name as subject_name, date, hour, student_id, tutor_id,user.name as name,user.email as email, user.address as address from appointment 
+                join user on appointment.student_id = user.id 
+                join subject s on appointment.subject_id = s.id
+                where tutor_id=:tutor AND date >= CURRENT_DATE';
 
         try {
             $stmt = $conn->prepare($sql);
@@ -86,7 +90,11 @@ class AppointmentRepository extends ServiceEntityRepository
     public function getStudentAppointments(int $studentId)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'select appointment.id, subject_id, u.id as user_id, email, name, address, date, hour from appointment join user u on appointment.tutor_id = u.id where student_id=:student AND date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 15 DAY ';
+//        $sql = 'select appointment.id, subject_id, u.id as user_id, email, name, address, date, hour from appointment join user u on appointment.tutor_id = u.id where student_id=:student AND date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 15 DAY ';
+        $sql = 'select appointment.id as id,subject_id, s.name as subject_name, date, hour, student_id, tutor_id,user.name as name,user.email as email from appointment 
+                join user on appointment.student_id = user.id 
+                join subject s on appointment.subject_id = s.id
+                where student_id=:student AND date >= CURRENT_DATE';
 
         try {
             $stmt = $conn->prepare($sql);
