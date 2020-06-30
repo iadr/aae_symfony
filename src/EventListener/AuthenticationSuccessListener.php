@@ -26,7 +26,11 @@ class AuthenticationSuccessListener
             "id" => $user->getId(),
             "name" => $user->getName(),
             "email" => $user->getEmail(),
-            "roles" => $user->getRoles()
+            "roles" => $user->getRoles(),
+            "studyIn" => $user->getStudyIn(),
+            "major" => $user->getMajor(),
+            "address" => $user->getAddress(),
+            "description" => $user->getDescription(),
             ];
 
         $event->setData($data);

@@ -82,7 +82,7 @@ class AppointmentController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/subject_tutors/{type}/{subject_id}/{date}.{_format}", name="api_tutors_by_subject", defaults={"_format":"json"})
+     * @Rest\Get("/subject_tutors", name="api_tutors_by_subject", defaults={"_format":"json"})
      *
      * @SWG\Response(
      *     response=200,
@@ -101,15 +101,33 @@ class AppointmentController extends FOSRestController
      *     description="The ID"
      * )
      *
+     * @SWG\Parameter(
+     *     name="type",
+     *     in="query",
+     *     type="string",
+     *     description="The Appointment Type"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="subject_id",
+     *     in="query",
+     *     type="string",
+     *     description="The Subject ID"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="date",
+     *     in="query",
+     *     type="string",
+     *     description="The search date"
+     * )
+     *
      *
      * @SWG\Tag(name="Appointment")
      * @param Request $request
-     * @param int $subject_id
-     * @param string $date
-     * @param int $type
      * @return Response
      */
-    public function getTutorsBySubjectAction(Request $request, int $subject_id, string $date, int $type)
+    public function getTutorsBySubjectAction(Request $request)
     {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
@@ -119,7 +137,10 @@ class AppointmentController extends FOSRestController
         try {
             $code = 200;
             $error = false;
-            $tutors = $em->getRepository(Subject::class)->getTutorIds($subject_id);
+            $subjectId=$request->query->get('subject_id');
+            $date=$request->query->get('date');
+            $type=$request->query->get('type');
+            $tutors = $em->getRepository(Subject::class)->getTutorIds($subjectId);
             if ($type==1){
                 $objects = $em->getRepository(TutorHours::class)->getTutorAvailableHours($tutors,$date);
             } else {
@@ -181,7 +202,7 @@ class AppointmentController extends FOSRestController
      * @return Response
      * @throws \Exception
      */
-    public function getTutorAvailableHoursAction(Request $request,int $tutorId,string $date) //! No funciona, parametro debe ir en ruta
+    public function getTutorAvailableHoursAction(Request $request,int $tutorId,string $date) // No se utiliza
     {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
